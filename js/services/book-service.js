@@ -11,6 +11,40 @@ export const bookService = {
   getEmptyBook,
   get,
   getNextBookId,
+  getBookFromApi,
+  addBook,
+}
+
+function getBookFromApi(value){
+  const BOOK_API = `https://www.googleapis.com/books/v1/volumes?printType=books&q=${value}`
+  return axios.get(BOOK_API).then(({data}) =>{
+    return _bookData(data.items)} )
+}
+
+function _bookData(data){
+  return data.map((book)=>{
+    let bookv = book.volumeInfo
+    return {
+      title:bookv.title,
+      subtitle:bookv.subtitle,
+      authors:bookv.authors,
+      publishedDate:bookv.publishedDate,
+      description:bookv.description,
+      pageCount:bookv.pageCount,
+      categories:bookv.categories,
+      thumbnail:bookv.imageLinks.thumbnail,
+      language:bookv.language,
+      listPrice:{
+        amount: rand(10,200),
+        currencyCode: "USD",
+        isOnSale: false,
+      }
+    }
+  })
+}
+
+function addBook(book){
+  return storageService.post(BOOKS_KEY,book)
 }
 
 function query() {
@@ -432,11 +466,8 @@ function _createBooks() {
   return books
 }
 
-function _createBook(title, price = 250) {
-  const book = {
-    id: utilService.makeId(),
-    title,
-    price,
-  }
-  return book
+function rand(min, max){
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min)
 }

@@ -1,13 +1,15 @@
 import { bookService } from "../services/book-service.js"
 import bookList from "../cmps/book-list.cmp.js"
 import bookFilter from "../cmps/book-filter-cmp.js"
+import bookAdd from "./book-add.cmp.js"
 import { eventBus } from "../services/eventBus-service.js"
 
 export default {
   template: `
    <section class="book-app">
     <book-filter @filtered="filterBook" :books="books" v-if="books"/>
-    <router-link to="/book/add">Add new book</router-link>
+    <book-add></book-add>
+    <!-- <router-link to="/book/add">Add new book</router-link> -->
     <book-list @removed="removeBook" @selected="selectBook" :books="booksToDisplay" />
    </section>
 
@@ -15,6 +17,7 @@ export default {
   components: {
     bookList,
     bookFilter,
+    bookAdd,
   },
   data() {
     return {

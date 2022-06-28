@@ -24,7 +24,7 @@ export default {
           <!-- <router-link :to="'/book/' + nextBookId">Next Book</router-link> -->
           <button @click='clickBack'>Back</button>
       </section>
-      <!-- <div v-else>Loading...</div> -->
+      <div v-else>Loading...</div>
   `,
   components: {
     longText,
@@ -45,7 +45,6 @@ export default {
       this.$router.back()
     },
     nextBook() {
-      console.log("this.nextBookId", this.nextBookId)
       this.$router.push("/book/" + this.nextBookId)
     },
   },
@@ -90,7 +89,6 @@ export default {
           this.book = book
           bookService.getNextBookId(id).then((nextBookId) => {
             this.nextBookId = nextBookId
-            console.log("nextbookId", this.nextBookId)
           })
         })
       },
