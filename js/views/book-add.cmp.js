@@ -6,9 +6,9 @@ export default {
 
  <button @click='clickBack'>Back</button> -->
     <section>
-        <input v-model='bookName' type='search' placehoder='search feom google' >
+        <input v-model='bookName' type='search' placeholder='search book from google...' >
        <button @click='searchBook'>search</button>
-       <ul><li v-for="book in books">{{book.title}}<button @click='addBook(book)'>➕</button></li></ul>
+       <ul><li v-for="book in books"><button @click='addBook(book)'>➕</button>{{book.title}}</li></ul>
     </section>
 
 `,

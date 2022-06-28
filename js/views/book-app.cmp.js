@@ -8,8 +8,7 @@ export default {
   template: `
    <section class="book-app">
     <book-filter @filtered="filterBook" :books="books" v-if="books"/>
-    <book-add></book-add>
-    <!-- <router-link to="/book/add">Add new book</router-link> -->
+    <book-add class='googleBook'></book-add>
     <book-list @removed="removeBook" @selected="selectBook" :books="booksToDisplay" />
    </section>
 
