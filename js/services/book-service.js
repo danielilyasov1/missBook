@@ -1,7 +1,7 @@
 import { utilService } from "./util-service.js"
 import { storageService } from "./async-storage-service.js"
 
-const CARS_KEY = "books"
+const BOOKS_KEY = "books"
 _createBooks()
 
 export const bookService = {
@@ -10,34 +10,43 @@ export const bookService = {
   save,
   getEmptyBook,
   get,
+  getNextBookId,
 }
 
 function query() {
-  return storageService.query(CARS_KEY)
-  // return utilService.loadFromStorage(CARS_KEY);
+  return storageService.query(BOOKS_KEY)
+  // return utilService.loadFromStorage(BOOKS_KEY);
 }
 
 function remove(bookId) {
-  return storageService.remove(CARS_KEY, bookId)
+  return storageService.remove(BOOKS_KEY, bookId)
 
   // const books = query();
   // const idx = books.findIndex(book => book.id === bookId);
   // books.splice(idx, 1);
-  // utilService.saveToStorage(CARS_KEY, books);
+  // utilService.saveToStorage(BOOKS_KEY, books);
 }
 
 function get(bookId) {
-  return storageService.get(CARS_KEY, bookId)
+  return storageService.get(BOOKS_KEY, bookId)
 }
 
 function save(book) {
-  if (book.id) return storageService.put(CARS_KEY, book)
-  else return storageService.post(CARS_KEY, book)
+  if (book.id) return storageService.put(BOOKS_KEY, book)
+  else return storageService.post(BOOKS_KEY, book)
   // book.id = utilService.makeId();
   // const books = query();
   // books.push(book);
-  // utilService.saveToStorage(CARS_KEY, books);
+  // utilService.saveToStorage(BOOKS_KEY, books);
   // return book;
+}
+
+function getNextBookId(BookId) {
+  return storageService.query(BOOKS_KEY)
+      .then(Books => {
+          const idx = Books.findIndex(Book => Book.id === BookId)
+          return (idx < Books.length-1)? Books[idx + 1].id : Books[0].id
+      })
 }
 
 function getEmptyBook() {
@@ -45,14 +54,14 @@ function getEmptyBook() {
 }
 
 function _createBooks() {
-  let books = utilService.loadFromStorage(CARS_KEY)
+  let books = utilService.loadFromStorage(BOOKS_KEY)
   if (!books || !books.length) {
     books = [
       {
         id: "OXeMG8wNskc",
         title: "metus hendrerit",
         subtitle: "mi est eros convallis auctor arcu dapibus himenaeos",
-        authors: ["Barbara Cartland"],
+        authors: ["Barbara Booktland"],
         publishedDate: 1999,
         description:
           "placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse",
@@ -70,7 +79,7 @@ function _createBooks() {
         id: "JYOJa2NpSCq",
         title: "morbi",
         subtitle: "lorem euismod dictumst inceptos mi",
-        authors: ["Barbara Cartland"],
+        authors: ["Barbara Booktland"],
         publishedDate: 1978,
         description:
           "aliquam pretium lorem laoreet etiam odio cubilia iaculis placerat aliquam tempor nisl auctor",
@@ -418,7 +427,7 @@ function _createBooks() {
         },
       },
     ]
-    utilService.saveToStorage(CARS_KEY, books)
+    utilService.saveToStorage(BOOKS_KEY, books)
   }
   return books
 }

@@ -20,9 +20,11 @@ export default {
           <p><span>Page count: </span>{{book.pageCount}}</p>
           <p><span>Published date: </span>{{book.publishedDate}}</p>
           <p><span>Language: </span>{{book.language}}</p>
+          <button @click='nextBook'>next book</button>
+          <!-- <router-link :to="'/book/' + nextBookId">Next Book</router-link> -->
           <button @click='clickBack'>Back</button>
       </section>
-      <div v-else>Loading...</div>
+      <!-- <div v-else>Loading...</div> -->
   `,
   components: {
     longText,
@@ -31,6 +33,7 @@ export default {
   data() {
     return {
       book: null,
+      nextBookId: null,
     }
   },
   created() {
@@ -38,9 +41,13 @@ export default {
     bookService.get(id).then((book) => (this.book = book))
   },
   methods: {
-    clickBack(){
+    clickBack() {
       this.$router.back()
-    }
+    },
+    nextBook() {
+      console.log("this.nextBookId", this.nextBookId)
+      this.$router.push("/book/" + this.nextBookId)
+    },
   },
   computed: {
     bookImgUrl() {
@@ -72,6 +79,22 @@ export default {
       const bookPrice = this.book.listPrice.amount
       if (bookPrice > 150) return "color-red"
       if (bookPrice < 20) return "color-green"
+    },
+  },
+  watch: {
+    "$route.params.bookId": {
+      handler() {
+        const id = this.$route.params.bookId
+        if (!id) return
+        bookService.get(id).then((book) => {
+          this.book = book
+          bookService.getNextBookId(id).then((nextBookId) => {
+            this.nextBookId = nextBookId
+            console.log("nextbookId", this.nextBookId)
+          })
+        })
+      },
+      immediate: true,
     },
   },
 }
